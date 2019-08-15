@@ -15,6 +15,7 @@ class App extends React.Component{
     url:"",
     error: false,
     success: false,
+    filesUploadedData:[]
   }
 
   handleUploadStart = ()=>{
@@ -24,6 +25,22 @@ class App extends React.Component{
       error: false,
       success: false,
     })
+  }
+
+  fetchFileData = () =>{
+    var fileDocs = [];
+    db.collection("files").get().then(snap=>{
+      console.log("snap size: "+snap.size);
+      for(const fileDoc of snap.docs)
+      {
+        console.log(fileDoc.data().fileName);
+        fileDocs.push(fileDoc.data().fileName);
+      }
+      console.log("length: "+fileDocs.length);
+      this.setState({
+        filesUploadedData:fileDocs,
+      });
+    });
   }
 
   handleError =(error)=>{
@@ -44,13 +61,21 @@ class App extends React.Component{
         success: true,
       }
     );
+    const DateNow = new Date(Date.now());
     firebase.storage().ref("files").child(filename).getDownloadURL().then(url=>{
       console.log("at least called!");
       db.collection("files").add({
         fileName: filename,
         fileUrl : url,
-      })
+        timestamp: DateNow.getTime()
+      }).then(
+        console.log(`data ${filename} ${url} ${DateNow.getTime()} saved successfully into database`)
+      )
     })
+  }
+
+  componentDidMount(){
+    this.fetchFileData();
   }
 
   handleOnProgress = progress =>{
@@ -74,13 +99,15 @@ class App extends React.Component{
        onProgress = {this.handleOnProgress}
       />
       <UploadingStatus isUploading = {this.state.isUploading} error = {this.state.error} success = {this.state.success} progress = {this.state.progress}/>
+      <ul>
+        {this.state.filesUploadedData.map((file)=><li>{file}</li>)}
+      </ul>
     </div>
     );
   }
 }
 
 function UploadingStatus(props){
-  console.log(props.progress);
   if(props.isUploading===true && props.error===false && props.success===false )
   {
     return(
