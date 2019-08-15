@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import FileUploader from 'react-firebase-file-uploader';
 import firebase from 'firebase';
-import firebaseConfig from './firebase-config';
+import firebaseConfig from '../firebase-config';
+import UploadingStatus from './UploadStatus'
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -107,26 +108,7 @@ class App extends React.Component{
   }
 }
 
-function UploadingStatus(props){
-  if(props.isUploading===true && props.error===false && props.success===false )
-  {
-    return(
-      <div>
-        <p>Uploading....{props.progress}</p>
-        </div>
-    );
-  }
-  else if(props.error===true && props.isUploading===false && props.success===false){
-    return(<p>Error uploading file..</p>);
-  }
-  else if(props.error===false && props.isUploading===false && props.success===true)
-  {
-    return(<p>Success..</p>);
-  }
-  else{
-  return("");
-  }
-}
+
 
 
 export default App;
