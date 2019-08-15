@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import firebaseConfig from './firebase-config';
 
 firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 class App extends React.Component{
 
@@ -34,15 +35,22 @@ class App extends React.Component{
     })
   }
 
-  handleUploadSuccess = () =>{
-    console.log("success");
+  handleUploadSuccess = (filename) =>{
+    console.log("success uploading "+filename);
     this.setState(
       {
         isUploading: false,
         error: false,
         success: true,
       }
-    )
+    );
+    firebase.storage().ref("files").child(filename).getDownloadURL().then(url=>{
+      console.log("at least called!");
+      db.collection("files").add({
+        fileName: filename,
+        fileUrl : url,
+      })
+    })
   }
 
   handleOnProgress = progress =>{
