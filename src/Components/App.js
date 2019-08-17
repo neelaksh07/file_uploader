@@ -64,13 +64,12 @@ class App extends React.Component{
     );
     const DateNow = new Date(Date.now());
     firebase.storage().ref("files").child(filename).getDownloadURL().then(url=>{
-      console.log("at least called!");
       db.collection("files").add({
         fileName: filename,
         fileUrl : url,
         timestamp: DateNow.getTime()
       }).then(
-        console.log(`data ${filename} ${url} ${DateNow.getTime()} saved successfully into database`)
+          this.fetchFileData() 
       )
     })
   }
