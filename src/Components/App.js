@@ -34,8 +34,12 @@ class App extends React.Component{
       console.log("snap size: "+snap.size);
       for(const fileDoc of snap.docs)
       {
-        console.log(fileDoc.data().fileName);
-        fileDocs.push(fileDoc.data().fileName);
+        var file = {
+          fileName: fileDoc.data().fileName,
+          downloadUrl: fileDoc.data().fileUrl,
+          timestamp: fileDoc.data().timestamp.toDate().toString()
+        }
+        fileDocs.push(file);
       }
       console.log("length: "+fileDocs.length);
       this.setState({
@@ -67,7 +71,7 @@ class App extends React.Component{
       db.collection("files").add({
         fileName: filename,
         fileUrl : url,
-        timestamp: DateNow.getTime()
+        timestamp: firebase.firestore.Timestamp.fromDate(DateNow),
       }).then(
           this.fetchFileData() 
       )
@@ -100,7 +104,10 @@ class App extends React.Component{
       />
       <UploadingStatus isUploading = {this.state.isUploading} error = {this.state.error} success = {this.state.success} progress = {this.state.progress}/>
       <ul>
-        {this.state.filesUploadedData.map((file)=><li>{file}</li>)}
+        {this.state.filesUploadedData.map((file)=><li>{<div>
+          <a href = {file.downloadUrl}>{file.fileName}</a>
+          <p>at {file.timestamp}</p>
+        </div>}</li>)}
       </ul>
     </div>
     );
