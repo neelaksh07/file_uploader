@@ -1,4 +1,19 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# File Uploader
+This project behaves like a common online portal where users can store academic and other informative stuff
+in the form of files.
+
+## Frameworks Used: 
+1. **React** - Front End
+2. **Firebase** - Back End
+
+##Packages used
+
+### FileUploader
+[File Uploader](https://www.npmjs.com/package/react-firebase-file-uploader)
+Initialize Storage bucket in Firebase and copy the storage bucket string from Storage to the Firebase config file.
+
+### React Router
+[React Router](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Redirect.md)
 
 ## Available Scripts
 
@@ -11,12 +26,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
-
-## FileUploader
-Url: https://www.npmjs.com/package/react-firebase-file-uploader
-
-Initialize Storage bucket in Firebase and copy the storage bucket string from Storage to the Firebase config file.
-
 
 ### `npm test`
 
